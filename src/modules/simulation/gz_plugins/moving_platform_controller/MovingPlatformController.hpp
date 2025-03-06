@@ -34,28 +34,34 @@
 #pragma once
 
 #include <gz/sim/System.hh>
+#include <gz/transport/Node.hh>
 
 namespace custom
 {
-class MovingPlatformController
-	: public gz::sim::System,
-	  public gz::sim::ISystemConfigure,
-	  public gz::sim::ISystemPreUpdate
+class MovingPlatformController:
+	public gz::sim::System,
+	public gz::sim::ISystemPreUpdate,
+	public gz::sim::ISystemPostUpdate,
+	public gz::sim::ISystemConfigure
 {
 public:
-
-	MovingPlatformController();
-
 	void PreUpdate(const gz::sim::UpdateInfo &_info,
 		       gz::sim::EntityComponentManager &_ecm) final;
+
+	void PostUpdate(const gz::sim::UpdateInfo &_info,
+			const gz::sim::EntityComponentManager &_ecm) final;
 
 	void Configure(const gz::sim::Entity &entity,
 		       const std::shared_ptr<const sdf::Element> &sdf,
 		       gz::sim::EntityComponentManager &ecm,
 		       gz::sim::EventManager &eventMgr) override;
 
+	MovingPlatformController();
+	~MovingPlatformController() override = default;
 
 private:
+
+	gz::transport::Node _node;
 
 	void updatePose(const gz::sim::EntityComponentManager &ecm);
 	void updateVelocityCommands(const gz::math::Vector3d &mean_velocity);
@@ -72,6 +78,5 @@ private:
 
 	gz::math::Vector3d _platform_position{0., 0., 0.};
 	gz::math::Quaterniond _platform_orientation{1., 0., 0., 0.};
-
 };
 } // end namespace custom

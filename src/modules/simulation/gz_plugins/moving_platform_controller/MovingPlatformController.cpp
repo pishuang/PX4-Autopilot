@@ -31,10 +31,7 @@
  *
  ****************************************************************************/
 
-
 #include "MovingPlatformController.hpp"
-
-using namespace custom;
 
 #include <gz/plugin/Register.hh>
 
@@ -46,6 +43,18 @@ using namespace custom;
 #include <gz/math.hh>
 #include <gz/math/Rand.hh>
 #include <gz/math/Pose3.hh>
+
+
+using namespace custom;
+
+// Register the plugin
+GZ_ADD_PLUGIN(
+	MovingPlatformController,
+	gz::sim::System,
+	gz::sim::ISystemPreUpdate,
+	gz::sim::ISystemPostUpdate,
+	gz::sim::ISystemConfigure
+)
 
 void MovingPlatformController::Configure(const gz::sim::Entity &entity,
 		const std::shared_ptr<const sdf::Element> &sdf,
@@ -142,7 +151,3 @@ void MovingPlatformController::sendVelocityCommands()
 {
 
 }
-
-GZ_ADD_PLUGIN(MovingPlatformController, gz::sim::System, MovingPlatformController::ISystemPreUpdate)
-
-GZ_ADD_PLUGIN_ALIAS(MovingPlatformController, "custom::MovingPlatformController")
